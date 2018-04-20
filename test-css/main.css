@@ -1,0 +1,14 @@
+/*
+styleguide: main;
+markup: <p>Lorem ipsum</p>;
+description: this is a description;
+markup: <q>Quote</q>;
+description: this is a new paragraph;
+template: tmp1;
+this part will not be part of the object
+end
+*/
+
+.main{
+  color: red;
+}

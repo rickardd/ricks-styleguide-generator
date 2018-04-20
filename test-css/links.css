@@ -1,0 +1,13 @@
+/*
+styleguide: links;
+description: this is a description;
+markup: <a href="#">link</a>;
+description: this is a new paragraph;
+template: tmp2;
+end
+*/
+
+
+a{
+  text-style: none;
+}
