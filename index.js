@@ -9,13 +9,12 @@ let blocks = [];
 
 function getBlocks( fileString ){
   return new Promise(function(resolve, reject) {
-    let blocks = fileString.match(/\bStyleguide:[\s\S]*?(?<=end|$)/gi);
-    let styleguide = [];
-    if ( !blocks ) {
+    let _blocks = fileString.match(/\bStyleguide:[\s\S]*?(?<=end|$)/gi);
+    if ( !_blocks ) {
       reject('No recognised styleguide comments')
       return
     }
-    blocks.forEach( function( block ){
+    _blocks.forEach( function( block ){
       let obj = {};
       let title = block.match(/(?<=styleguide:).*;/i);
       obj.title = !!title ? title[0].trim() : null;
@@ -35,9 +34,9 @@ function getBlocks( fileString ){
         ? markups.map( m => m.trim() )
         : null;
 
-      styleguide.push(obj);
+      blocks.push(obj);
     });
-    resolve(styleguide)
+    resolve()
   })
 }
 
@@ -46,7 +45,6 @@ function treatFile( filePath ) {
     file.getAsString( filePath ).then( fileString => {
       getBlocks( fileString ).then(
         commentBlocks => {
-          blocks.push( commentBlocks )
           resolve()
         },
         error => {
@@ -78,12 +76,10 @@ function fromDir(startPath, extension){
     });
     Promise.all( treatFilePromises ).then( () => {
       clGreen('ALL FILES DONE!')
+      console.log(blocks)
       htmlParser.generate(blocks)
     })
 };
-
-
-
 
 var init = () => {
   fromDir('./test-css', '.css');
