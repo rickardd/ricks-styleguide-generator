@@ -1,18 +1,11 @@
 console.clear();
-let fs = require("fs");
-let path = require('path');
-let htmlParser = require('./htmlGenerator');
-let {clRed, clGreen, clBlue} = require('./console');
+const fs = require("fs");
+const path = require('path');
+const htmlParser = require('./htmlGenerator');
+const {clRed, clGreen, clBlue} = require('./console');
+const file = require('./file')
 
 let blocks = [];
-
-function getFileAsString( filePath ){
-  return new Promise( (resolve, reject) => {
-    fs.readFile(filePath, "utf8", (err, data) => {
-      resolve(data);
-    });
-  })
-}
 
 function getBlocks( fileString ){
   return new Promise(function(resolve, reject) {
@@ -50,7 +43,7 @@ function getBlocks( fileString ){
 
 function treatFile( filePath ) {
   return new Promise( (resolve, reject) => {
-    getFileAsString( filePath ).then( fileString => {
+    file.getAsString( filePath ).then( fileString => {
       getBlocks( fileString ).then(
         commentBlocks => {
           blocks.push( commentBlocks )
@@ -65,19 +58,13 @@ function treatFile( filePath ) {
   })
 }
 
-
 function fromDir(startPath, extension){
-    console.log('Starting from dir '+startPath+'/');
-
     if (!fs.existsSync(startPath)){
         clRed("no dir " + startPath);
         return;
     }
-
     let files = fs.readdirSync(startPath);
-
     let treatFilePromises = []
-
     files.forEach( file => {
       let filename = path.join(startPath, file);
       let stat = fs.lstatSync(filename);
@@ -89,10 +76,8 @@ function fromDir(startPath, extension){
           treatFilePromises.push( treatFile(filename) );
       };
     });
-
     Promise.all( treatFilePromises ).then( () => {
       clGreen('ALL FILES DONE!')
-      console.log(blocks)
       htmlParser.generate(blocks)
     })
 };

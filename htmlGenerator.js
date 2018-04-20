@@ -25,13 +25,7 @@ let parseMustache = ( htmlStr ) => {
       }
     ]
   }
-
-  console.log(htmlStr)
-
-  const parsedHtml = Mustache.render(htmlStr, blocksTemp);
-  clBlue( parsedHtml )
-
-  return parsedHtml
+  return Mustache.render(htmlStr, blocksTemp);
 }
 
 let parse = () => {
