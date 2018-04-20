@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{title}}</title>
+</head>
+<body>
+  <header class="RSG-header">
+    <h1>{{title}}</h1>
+  </header>
+  <navigation class="RSG-sidebar">
+    <ul>
+      {{#blocks}}
+        <li><a href="#{{title}}">{{title}}</a></li>
+      {{/blocks}}
+    </ul>
+  </navigation>
+  <main class="RSG-content">
+  {{#blocks}}
+    <article>
+      <h1>{{title}}</h1>
+      Descriptions: <br>
+      {{#descriptions.length}}
+      <ul>
+        {{#descriptions}}
+          <p>{{.}}</p>
+        {{/descriptions}}
+      </ul>
+      {{/descriptions.length}}
+
+      {{^descriptions.length}}
+        <p>-- No discription --</p>
+      {{/descriptions.length}}
+      Markups: .. <br>
+      <ul>
+        <li>Markup</li>
+      </ul>
+    </article>
+    <hr>
+  {{/blocks}}
+
+  </main>
+</body>
+</html>

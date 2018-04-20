@@ -1,0 +1,23 @@
+{
+  "name": "ricks-style-guide",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "mustache dataView.json myTemplate.mustache > public/output.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rickardd/ricks-styleguide-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rickardd/ricks-styleguide-generator/issues"
+  },
+  "homepage": "https://github.com/rickardd/ricks-styleguide-generator#readme",
+  "devDependencies": {
+    "mustache": "^2.3.0"
+  }
+}
