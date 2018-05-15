@@ -3,58 +3,138 @@
 <head>
   <title>Ricks StyleGuide</title>
   <link rel="stylesheet" href="./test-css/icons.css">
+  <link rel="stylesheet" href="./test-css/buttons.css">
+  <link rel="stylesheet" href="./test-css/colors.css">
+  <link rel="stylesheet" href="./test-css/links.css">
+  <link rel="stylesheet" href="./test-css/main.css">
+  <style>
+
+
+    .RSG-header{
+      text-align: center;
+      padding: 6px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .RSG-page-container{
+      display: flex;
+    }
+    .RSG-sidebar{
+      width: 200px;
+      margin-right: 24px;
+      padding: 12px;
+      background: #eee;
+    }
+    .RSG-content{
+      width: 100%;
+    }
+
+    .RSG-block{
+      border-left: 4px solid #eee;
+      padding: 24px;
+    }
+
+    .RSG-block-section{
+      padding: 12px;
+      background: #eee;
+    }
+    .RSG-markup{
+      padding: 6px;
+      background: #fff;
+      margin-bottom: 1px;
+    }
+  </style>
 </head>
 <body>
   <header class="RSG-header">
     <h1>Ricks StyleGuide</h1>
   </header>
-  <navigation class="RSG-sidebar">
-    <ul>
-        <li><a href="#Icons">Icons</a></li>
-    </ul>
-  </navigation>
-  <main class="RSG-content">
-    <h1>Icons</h1>
-    <strong>Descriptions:</strong> <br>
+  <div class="RSG-page-container">
+    <navigation class="RSG-sidebar">
       <ul>
-          <p>BLOCK Lorem ipsum
-  dolar sit amet</p>
-          <p>rick Lorem ipsum
-  dolar sit amet</p>
-          <p>SECTION rick Lorem ipsum
-  dolar sit amet</p>
-          <p>rick Lorem ipsum
-  dolar sit amet</p>
+          <li><a href="#Buttons">Buttons</a></li>
+          <li><a href="#Icons">Icons</a></li>
       </ul>
-    <article id="Icons">
+    </navigation>
+    <main class="RSG-content">
 
-
-        <strong>Descriptions:</strong> <br>
+    <article class="RSG-block" id="Buttons">
+      <h1>Buttons</h1>
+      <strong>Descriptions:</strong> <br>
         <ul>
+            <p>BLOCK Lorem ipsum dolar sit amet</p>
+        </ul>
+        <div class="RSG-block-section">
+          <strong>Descriptions:</strong> <br>
+          <ul>
+          </ul>
+
+          <strong>Classes:</strong> <br>
+          <ul>
+              <p>@class - .button-1</p>
+              <p>@class - .button-2</p>
+              <p>@class - .button-3</p>
+          </ul>
+
+
+            <div class="RSG-markup">
+              <a class="button button-1">Button</a>
+            </div>
+            <div class="RSG-markup">
+              <a class="button button-2">Button</a>
+            </div>
+            <div class="RSG-markup">
+              <a class="button button-3">Button</a>
+            </div>
+
+          </div>
+      </article>
+      <hr>
+    <article class="RSG-block" id="Icons">
+      <h1>Icons</h1>
+      <strong>Descriptions:</strong> <br>
+        <ul>
+            <p>BLOCK Lorem ipsum
+  dolar sit amet</p>
+            <p>rick Lorem ipsum
+  dolar sit amet</p>
             <p>SECTION rick Lorem ipsum
   dolar sit amet</p>
             <p>rick Lorem ipsum
   dolar sit amet</p>
         </ul>
+        <div class="RSG-block-section">
+          <strong>Descriptions:</strong> <br>
+          <ul>
+              <p>SECTION rick Lorem ipsum
+  dolar sit amet</p>
+              <p>rick Lorem ipsum
+  dolar sit amet</p>
+          </ul>
 
-        <strong>Classes:</strong> <br>
-        <ul>
-            <p>@class - .icon-1</p>
-            <p>@class - .icon-2</p>
-            <p>@class - .icon-3</p>
-        </ul>
-
-        <strong>Markups:</strong> <br>
-          <a class="icon-1">link</a> <br>
-          <a class="icon-2">link</a> <br>
-          <a class="icon-3">link</a> <br>
+          <strong>Classes:</strong> <br>
+          <ul>
+              <p>@class - .icon-1</p>
+              <p>@class - .icon-2</p>
+              <p>@class - .icon-3</p>
+          </ul>
 
 
+            <div class="RSG-markup">
+              <a class="icon-1">link</a>
+            </div>
+            <div class="RSG-markup">
+              <a class="icon-2">link</a>
+            </div>
+            <div class="RSG-markup">
+              <a class="icon-3">link</a>
+            </div>
 
+          </div>
+      </article>
+      <hr>
 
-    </article>
-    <hr>
-
-  </main>
+    </main>
+  </div>
 </body>
 </html>

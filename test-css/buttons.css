@@ -1,0 +1,32 @@
+/**@
+@# Buttons;
+@description BLOCK Lorem ipsum dolar sit amet;
+@class .link3;
+@class .link4;
+@--
+@markup <a class="button {{class}}">Button</a>;
+@class .button-1;
+@class .button-2;
+@class .button-3;
+@/-
+@*/
+
+
+.button{
+  padding: 12px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.button-1{
+  background-color: black;
+  color: white;
+}
+.button-2{
+  background-color: red;
+  color: white;
+}
+.button-3{
+  background-color: purple;
+  color: white;
+}

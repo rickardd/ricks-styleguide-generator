@@ -3,60 +3,103 @@
 <head>
   <title>{{title}}</title>
   <link rel="stylesheet" href="./test-css/icons.css">
+  <link rel="stylesheet" href="./test-css/buttons.css">
+  <link rel="stylesheet" href="./test-css/colors.css">
+  <link rel="stylesheet" href="./test-css/links.css">
+  <link rel="stylesheet" href="./test-css/main.css">
+  <style>
+
+
+    .RSG-header{
+      text-align: center;
+      padding: 6px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .RSG-page-container{
+      display: flex;
+    }
+    .RSG-sidebar{
+      width: 200px;
+      margin-right: 24px;
+      padding: 12px;
+      background: #eee;
+    }
+    .RSG-content{
+      width: 100%;
+    }
+
+    .RSG-block{
+      border-left: 4px solid #eee;
+      padding: 24px;
+    }
+
+    .RSG-block-section{
+      padding: 12px;
+      background: #eee;
+    }
+    .RSG-markup{
+      padding: 6px;
+      background: #fff;
+      margin-bottom: 1px;
+    }
+  </style>
 </head>
 <body>
   <header class="RSG-header">
     <h1>{{title}}</h1>
   </header>
-  <navigation class="RSG-sidebar">
-    <ul>
-      {{#blocks}}
-        <li><a href="#{{title}}">{{title}}</a></li>
-      {{/blocks}}
-    </ul>
-  </navigation>
-  <main class="RSG-content">
-  {{#blocks}}
-    <h1>{{title}}</h1>
-    <strong>Descriptions:</strong> <br>
+  <div class="RSG-page-container">
+    <navigation class="RSG-sidebar">
       <ul>
-        {{#descriptions}}
-          <p>{{.}}</p>
-        {{/descriptions}}
+        {{#blocks}}
+          <li><a href="#{{title}}">{{title}}</a></li>
+        {{/blocks}}
       </ul>
-    {{#.}}
-    <article id="{{title}}">
+    </navigation>
+    <main class="RSG-content">
 
-      {{#sections}}
-
-        <strong>Descriptions:</strong> <br>
+    {{#blocks}}
+    <article class="RSG-block" id="{{title}}">
+      <h1>{{title}}</h1>
+      <strong>Descriptions:</strong> <br>
         <ul>
           {{#descriptions}}
             <p>{{.}}</p>
           {{/descriptions}}
         </ul>
+      {{#.}}
+        {{#sections}}
+        <div class="RSG-block-section">
+          <strong>Descriptions:</strong> <br>
+          <ul>
+            {{#descriptions}}
+              <p>{{.}}</p>
+            {{/descriptions}}
+          </ul>
 
-        <strong>Classes:</strong> <br>
-        <ul>
-          {{#classes}}
-            <p>{{key}} - {{value}}</p>
-          {{/classes}}
-        </ul>
-
-        <strong>Markups:</strong> <br>
-        {{#parsedMarkups}}
-          {{{.}}} <br>
-        {{/parsedMarkups}}
+          <strong>Classes:</strong> <br>
+          <ul>
+            {{#classes}}
+              <p>{{key}} - {{value}}</p>
+            {{/classes}}
+          </ul>
 
 
+          {{#parsedMarkups}}
+            <div class="RSG-markup">
+              {{{.}}}
+            </div>
+          {{/parsedMarkups}}
 
-      {{/sections}}
+          </div>
+        {{/sections}}
+        {{/.}}
+      </article>
+      <hr>
+    {{/blocks}}
 
-    </article>
-    {{/.}}
-    <hr>
-  {{/blocks}}
-
-  </main>
+    </main>
+  </div>
 </body>
 </html>
