@@ -9,6 +9,56 @@
 
 */
 
-.icon-hello{
 
+/**@
+
+@# Icons;
+
+@markup <span class="icon">WRONG</span>;
+
+@description
+  BLOCK Lorem ipsum
+  dolar sit amet;
+
+
+@description
+  rick Lorem ipsum
+  dolar sit amet;
+
+@class .link3;
+@class .link4;
+
+
+@--
+
+@markup <a class="{{class}}">link</a>;
+
+@title section title;
+
+@description
+  SECTION rick Lorem ipsum
+  dolar sit amet;
+
+@class .icon-1;
+@class .icon-2;
+@class .icon-3;
+
+@description
+  rick Lorem ipsum
+  dolar sit amet;
+
+@/-
+
+@*/
+
+
+.icon-1{
+  color: red;
+}
+
+.icon-2{
+  color: green;
+}
+.icon-2{
+  color: purple;
 }

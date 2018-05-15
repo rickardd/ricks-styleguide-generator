@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>{{title}}</title>
+  <link rel="stylesheet" href="./test-css/icons.css">
 </head>
 <body>
   <header class="RSG-header">
@@ -16,25 +17,43 @@
   </navigation>
   <main class="RSG-content">
   {{#blocks}}
-    <article id="{{title}}">
-      <h1>{{title}}</h1>
-      Descriptions: <br>
-      {{#descriptions.length}}
+    <h1>{{title}}</h1>
+    <strong>Descriptions:</strong> <br>
       <ul>
         {{#descriptions}}
           <p>{{.}}</p>
         {{/descriptions}}
       </ul>
-      {{/descriptions.length}}
+    {{#.}}
+    <article id="{{title}}">
 
-      {{^descriptions.length}}
-        <p>-- No discription --</p>
-      {{/descriptions.length}}
-      Markups: .. <br>
-      <ul>
-        <li>Markup</li>
-      </ul>
+      {{#sections}}
+
+        <strong>Descriptions:</strong> <br>
+        <ul>
+          {{#descriptions}}
+            <p>{{.}}</p>
+          {{/descriptions}}
+        </ul>
+
+        <strong>Classes:</strong> <br>
+        <ul>
+          {{#classes}}
+            <p>{{key}} - {{value}}</p>
+          {{/classes}}
+        </ul>
+
+        <strong>Markups:</strong> <br>
+        {{#parsedMarkups}}
+          {{{.}}} <br>
+        {{/parsedMarkups}}
+
+
+
+      {{/sections}}
+
     </article>
+    {{/.}}
     <hr>
   {{/blocks}}
 
