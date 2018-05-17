@@ -5,6 +5,7 @@ const path = require('path')
 const htmlParser = require('./htmlGenerator')
 const {clRed, clGreen, clBlue } = require('./console')
 const file = require('./file')
+
 const blockRegEx = /(?<=\/\*\*@).+(?=@\*\/)/gmis
 const blockTitleRegEx = /(?<=@#).+?;/gmis
 const itemsRegEx = /(@title|@markup|@description|@class).*?(?=;)/gmis
@@ -15,8 +16,14 @@ const blockValueRegEx = /(?<=@#|@description).+$/gmis
 const itemKeyRegEx = /(@title|@markup|@description|@class)/gmis
 const itemValueRegEx = /(?<=@title|@markup|@description|@class).+$/gmis
 const parseMarkupRegEx = /({{class}}|{{ class }})/gmis
+const regExIconSet = /(?<=\/\*\*@)iconset-.+?(?=\/\*\*@\/iconset)/gsmi;
+const regExIconBlock = /((\.).+?(?={)|@info\s.+?(?={))/gsmi;
+const regExIconSetName = /(?<=iconset-).+\b/i;
+const regExIconSetCssClass = /\..+/gmi;
+const regExIconSetCssClassInfo = /(?<=@info\s).*/i;
 
 let blocks = [];
+let iconSets = [];
 
 function getBlocks(fileString) {
 
@@ -26,9 +33,9 @@ function getBlocks(fileString) {
             reject('No recognised styleguide comments')
             return
         }
-        // console.clear()
+        console.clear()
         _blocks.forEach(block => {
-            console.log('---')
+            // console.log('---')
             let _block = {
                 title: null,
                 descriptions: [],
@@ -84,13 +91,13 @@ function getBlocks(fileString) {
                 _section.classes.forEach( obj => {
                   let className = obj.value.replace(/\./g, '')
                   let _parsedMarkup = _section.markup.replace(parseMarkupRegEx, className);
-                  console.log(_parsedMarkup)
+                  // console.log(_parsedMarkup)
                   _section.parsedMarkups.push( _parsedMarkup )
                 })
                 _block.sections.push(_section)
             })
             blocks.push(_block);
-            clBlue(util.inspect(blocks, false, null))
+            // clBlue(util.inspect(blocks, false, null))
         });
         resolve()
     })
@@ -98,19 +105,65 @@ function getBlocks(fileString) {
 
 
 
+function getIconSets(fileString) {
+    return new Promise(function(resolve, reject) {
+        let _iconSets = fileString.match(regExIconSet);
+        if (!_iconSets) {
+            reject('No recognised styleguide iconset')
+            return
+        }
+        clGreen( 'Styleguide Icon Set found')
+        _iconSets.forEach(set => {
+          let _iconBlockObj = {
+              title: set.match(regExIconSetName)[0],
+              cssClasses: []
+          }
+          let _iconBlock = set.match(regExIconBlock);
+          _iconBlock.forEach(block => {
+            let cssClass = block.match(regExIconSetCssClass);
+            let info = block.match(regExIconSetCssClassInfo);
+            _iconBlockObj.cssClasses.push({
+              info: (!!info) ? info[0].replace('\*\/', '').trim() : null, // trims and strips trailing */ if block comment
+              cssClass: cssClass.splice(',').map( c => c.trim() ) // creates an array and trim e.g ['.one', ',two']
+            })
+          })
+          iconSets.push(_iconBlockObj)
+        })
+        clGreen(util.inspect(iconSets, false, null))
+        resolve()
+    })
+}
+
 
 function treatFile(filePath) {
+    let promiseArray = [];
     return new Promise((resolve, reject) => {
         file.getAsString(filePath).then(fileString => {
-            getBlocks(fileString).then(
-                commentBlocks => {
+            promiseArray.push( new Promise( (resolve, error)  => {
+              getBlocks(fileString).then(
+                  commentBlocks => {
+                      resolve()
+                  },
+                  error => {
+                      clRed(filePath + ' - ' + error)
+                      resolve()
+                  }
+              )
+            }))
+            promiseArray.push( new Promise( (resolve, error)  => {
+              getIconSets(fileString).then(
+                iconSets => {
                     resolve()
                 },
                 error => {
                     clRed(filePath + ' - ' + error)
                     resolve()
                 }
-            )
+              )
+            }))
+            Promise.all( promiseArray ).then( () => {
+              resolve() // resolves first/parent/function- promise
+            })
         })
     })
 }
@@ -135,8 +188,8 @@ function fromDir(startPath, extension) {
     // todo return promise.
     Promise.all(treatFilePromises).then(() => {
         clGreen('ALL FILES DONE!')
-        console.log(blocks)
-        htmlParser.generate(blocks)
+        // console.log(blocks)
+        htmlParser.generate(blocks, iconSets)
     })
 };
 

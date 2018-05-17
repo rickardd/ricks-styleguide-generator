@@ -36,6 +36,25 @@
 
 @/-
 
+
+@--
+
+@markup <a class="{{class}}">link</a>;
+
+@title Sectoin two title;
+
+@description lorem ipsum dolar ist amet;
+
+@class .icon-1;
+@class .icon-2;
+@class .icon-3;
+
+@description
+  rick Lorem ipsum
+  dolar sit amet;
+
+@/-
+
 @*/
 
 
@@ -49,3 +68,77 @@
 .icon-2{
   color: purple;
 }
+
+
+
+
+
+
+/**@
+
+@#Icons
+@markup <a>link</a>;
+
+@description
+  Lorem ipsum d
+  olar sit amet;
+
+@class .fist;
+
+@markup
+<a>link</a>;
+
+@*/
+
+
+
+/**@iconset-custom */
+.glyphicon-minus                  { &:before { content: "\2212"; } }
+.glyphicon-cloud                  { &:before { content: "\2601"; } }
+/**@info content: "\2709"*/
+.glyphicon-envelope               { &:before { content: "\2709"; } }
+.glyphicon-pencil                 { &:before { content: "\270f"; } }
+/**@info content: "\2709" */
+.glyphicon-glass                  { &:before { content: "\e001"; } }
+.glyphicon-music                  { &:before { content: "\e002"; } }
+//   @info content: "\2709" ;
+.glyphicon-search                 { &:before { content: "\e003"; } }
+.glyphicon-heart                  { &:before { content: "\e005"; } }
+.glyphicon-star                   { &:before { content: "\e006"; } }
+.glyphicon-star-empty,
+.glyphicon-star-full             { &:before { content: "\e007"; } }
+/**@/iconset */
+
+/**@iconset-social */
+.glyphicon-minus                  { &:before { content: "\2212"; } }
+.glyphicon-cloud                  { &:before { content: "\2601"; } }
+/**@info content: "\2709"*/
+.glyphicon-envelope               { &:before { content: "\2709"; } }
+.glyphicon-pencil                 { &:before { content: "\270f"; } }
+/**@info content: "\2709" */
+.glyphicon-glass                  { &:before { content: "\e001"; } }
+.glyphicon-music                  { &:before { content: "\e002"; } }
+//   @info content: "\2709" ;
+.glyphicon-search                 { &:before { content: "\e003"; } }
+.glyphicon-heart                  { &:before { content: "\e005"; } }
+.glyphicon-star                   { &:before { content: "\e006"; } }
+.glyphicon-star-empty,
+.glyphicon-star-full             { &:before { content: "\e007"; } }
+/**@/iconset */
+
+/**@iconset-brands */
+.glyphicon-minus                  { &:before { content: "\2212"; } }
+.glyphicon-cloud                  { &:before { content: "\2601"; } }
+/**@info content: "\2709"*/
+.glyphicon-envelope               { &:before { content: "\2709"; } }
+.glyphicon-pencil                 { &:before { content: "\270f"; } }
+/**@info content: "\2709" */
+.glyphicon-glass                  { &:before { content: "\e001"; } }
+.glyphicon-music                  { &:before { content: "\e002"; } }
+//   @info content: "\2709" ;
+.glyphicon-search                 { &:before { content: "\e003"; } }
+.glyphicon-heart                  { &:before { content: "\e005"; } }
+.glyphicon-star                   { &:before { content: "\e006"; } }
+.glyphicon-star-empty,
+.glyphicon-star-full             { &:before { content: "\e007"; } }
+/**@/iconset */

@@ -99,6 +99,20 @@
       <hr>
     {{/blocks}}
 
+
+    <hr>
+    {{#iconSets}}
+      <article>
+        <h1>{{title}}</h1>
+        {{#cssClasses}}
+          <strong>{{cssClass}}</strong> - {{info}} <br>
+        {{/cssClasses}}
+        <hr>
+      </article>
+      {{.}}
+    {{/iconSets}}
+
+
     </main>
   </div>
 </body>

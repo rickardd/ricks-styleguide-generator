@@ -5,18 +5,20 @@ const file = require('./file')
 const Mustache = require('mustache')
 
 let blocks;
+let icons;
 
 let parseMustache = ( htmlStr ) => {
   obj = {
     title: CONFIG.title,
-    blocks: blocks
+    blocks: blocks,
+    iconSets: icons
   }
   return Mustache.render(htmlStr, obj);
 }
 
 let parse = () => {
   const path = `${CONFIG.src}/${CONFIG.templateSrc}`;
-  clBlue('path:', path)
+  // clBlue('path:', path)
   if (!fs.existsSync(CONFIG.src)){
       clRed("Src folder not found " + CONFIG.src);
       return;
@@ -34,16 +36,18 @@ let parse = () => {
 }
 
 let saveToFile = (html) => {
-  clBlue(CONFIG.templateDist)
-  clBlue(html)
+  // clBlue(CONFIG.templateDist)
+  // clBlue(html)
   //ToDo: make this work
   // const path = `${CONFIG.dist}/${CONFIG.templateDist}`
   const path = CONFIG.templateDist
   file.save(path, html)
 }
 
-let generate = function ( _blocks ) {
+let generate = function ( _blocks, _iconSet ) {
   blocks = _blocks
+  icons = _iconSet
+  console.log(_iconSet)
   let html = parse().then(
     data => {
       saveToFile(data);
