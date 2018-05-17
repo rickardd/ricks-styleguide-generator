@@ -103,9 +103,13 @@
     <hr>
     {{#iconSets}}
       <article>
+        {{markup}}
         <h1>{{title}}</h1>
         {{#cssClasses}}
           <strong>{{cssClass}}</strong> - {{info}} <br>
+
+          {{{markup}}}
+
         {{/cssClasses}}
         <hr>
       </article>

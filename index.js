@@ -16,11 +16,12 @@ const blockValueRegEx = /(?<=@#|@description).+$/gmis
 const itemKeyRegEx = /(@title|@markup|@description|@class)/gmis
 const itemValueRegEx = /(?<=@title|@markup|@description|@class).+$/gmis
 const parseMarkupRegEx = /({{class}}|{{ class }})/gmis
-const regExIconSet = /(?<=\/\*\*@)iconset-.+?(?=\/\*\*@\/iconset)/gsmi;
-const regExIconBlock = /((\.).+?(?={)|@info\s.+?(?={))/gsmi;
-const regExIconSetName = /(?<=iconset-).+\b/i;
-const regExIconSetCssClass = /\..+/gmi;
-const regExIconSetCssClassInfo = /(?<=@info\s).*/i;
+const regExIconSet = /(?<=\/\*\*@)iconset-.+?(?=\/\*\*@\/iconset)/gsmi
+const regExIconBlock = /((\.).+?(?={)|@info\s.+?(?={))/gsmi
+const regExIconSetName = /(?<=iconset-).+\b/i
+const regExIconSetMarkup = /(?<=@markup\s).+/i
+const regExIconSetCssClass = /\..+/gmi
+const regExIconSetCssClassInfo = /(?<=@info\s).*/i
 
 let blocks = [];
 let iconSets = [];
@@ -114,17 +115,34 @@ function getIconSets(fileString) {
         }
         clGreen( 'Styleguide Icon Set found')
         _iconSets.forEach(set => {
+          let title = set.match(regExIconSetName)
+          let markup = set.match(regExIconSetMarkup)
+
+          title = !!title ? title[0] : null
+          markup = !!markup ? markup[0] : null
+
           let _iconBlockObj = {
-              title: set.match(regExIconSetName)[0],
+              title: title,
+              markup: markup,
               cssClasses: []
           }
-          let _iconBlock = set.match(regExIconBlock);
+          let _iconBlock = set.match(regExIconBlock)
           _iconBlock.forEach(block => {
-            let cssClass = block.match(regExIconSetCssClass);
-            let info = block.match(regExIconSetCssClassInfo);
+            let info = block.match(regExIconSetCssClassInfo)
+            let cssClass = block.match(regExIconSetCssClass)
+            let parsedMarkup = null
+
+            info = (!!info) ? info[0].replace('\*\/', '').trim() : null // trims and strips trailing */ if block comment
+            cssClass = cssClass.splice(',').map( c => c.trim() ) // creates an array and trim e.g ['.one', ',two']
+
+            if( !!markup ){
+              let parsedCssClass = cssClass[0].replace(/^(\.|#)/i, ''); // strips . and # from beginning of class
+              parsedMarkup = markup.replace(parseMarkupRegEx, parsedCssClass);
+            }
             _iconBlockObj.cssClasses.push({
-              info: (!!info) ? info[0].replace('\*\/', '').trim() : null, // trims and strips trailing */ if block comment
-              cssClass: cssClass.splice(',').map( c => c.trim() ) // creates an array and trim e.g ['.one', ',two']
+              info: info,
+              cssClass: cssClass,
+              markup: parsedMarkup
             })
           })
           iconSets.push(_iconBlockObj)
