@@ -1,0 +1,9 @@
+{
+  "Title": true,
+  "src": {
+    "path" : "/test-css"
+  },
+  "dist": {
+   "path" : "/dist-test-css"
+  }
+}
