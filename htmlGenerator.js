@@ -47,7 +47,6 @@ let saveToFile = (html) => {
 let generate = function ( _blocks, _iconSet ) {
   blocks = _blocks
   icons = _iconSet
-  console.log(_iconSet)
   let html = parse().then(
     data => {
       saveToFile(data);

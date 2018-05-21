@@ -20,7 +20,7 @@ const regExIconSet = /(?<=\/\*\*@)iconset-.+?(?=\/\*\*@\/iconset)/gsmi
 const regExIconBlock = /((\.).+?(?={)|@info\s.+?(?={))/gsmi
 const regExIconSetName = /(?<=iconset-).+\b/i
 const regExIconSetMarkup = /(?<=@markup\s).+/i
-const regExIconSetCssClass = /\..+/gmi
+const regExIconSetCssClass = /\..+?(?=:|{|\s)/gmi
 const regExIconSetCssClassInfo = /(?<=@info\s).*/i
 
 let blocks = [];
@@ -119,7 +119,7 @@ function getIconSets(fileString) {
           let markup = set.match(regExIconSetMarkup)
 
           title = !!title ? title[0] : null
-          markup = !!markup ? markup[0] : null
+          markup = !!markup ? markup[0].replace(/\*\//i, '') : null
 
           let _iconBlockObj = {
               title: title,
@@ -128,17 +128,19 @@ function getIconSets(fileString) {
           }
           let _iconBlock = set.match(regExIconBlock)
           _iconBlock.forEach(block => {
+
             let info = block.match(regExIconSetCssClassInfo)
             let cssClass = block.match(regExIconSetCssClass)
             let parsedMarkup = null
 
             info = (!!info) ? info[0].replace('\*\/', '').trim() : null // trims and strips trailing */ if block comment
-            cssClass = cssClass.splice(',').map( c => c.trim() ) // creates an array and trim e.g ['.one', ',two']
+            cssClass = cssClass.splice(',').map( c => c.replace(/:before/i, '').trim() ) // creates an array and trim e.g ['.one', ',two']
 
             if( !!markup ){
               let parsedCssClass = cssClass[0].replace(/^(\.|#)/i, ''); // strips . and # from beginning of class
               parsedMarkup = markup.replace(parseMarkupRegEx, parsedCssClass);
             }
+            console.log(parsedMarkup)
             _iconBlockObj.cssClasses.push({
               info: info,
               cssClass: cssClass,

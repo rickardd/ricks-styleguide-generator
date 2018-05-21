@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>{{title}}</title>
+  <link rel="stylesheet" href="./test-css/icon-fonts.css">
   <link rel="stylesheet" href="./test-css/icons.css">
   <link rel="stylesheet" href="./test-css/buttons.css">
   <link rel="stylesheet" href="./test-css/colors.css">
@@ -43,6 +44,15 @@
       background: #fff;
       margin-bottom: 1px;
     }
+
+    .RSG-icon-info{
+      margin-bottom: 4px;
+      color: #777;
+    }
+    .RSG-icon-markup{
+      margin-bottom: 24px;
+    }
+
   </style>
 </head>
 <body>
@@ -106,10 +116,12 @@
         {{markup}}
         <h1>{{title}}</h1>
         {{#cssClasses}}
-          <strong>{{cssClass}}</strong> - {{info}} <br>
-
-          {{{markup}}}
-
+          <div class="RSG-icon-info">
+            <strong>{{cssClass}}</strong> - {{info}} <br>
+          </div>
+          <div class="RSG-icon-markup">
+            {{{markup}}}
+          </div>
         {{/cssClasses}}
         <hr>
       </article>
