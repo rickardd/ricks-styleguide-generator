@@ -2,10 +2,11 @@ console.clear()
 const util = require('util')
 const fs = require("fs")
 const path = require('path')
-const htmlParser = require('./htmlGenerator')
-const {clRed, clGreen, clBlue } = require('./console')
-const file = require('./file')
+const htmlParser = require('./lib/html-generator')
+const { clRed, clGreen, clBlue } = require('./lib/console')
+const file = require('./lib/file')
 const { parser } = require('./lib/regEx')
+const { blockLib } = require('./lib/blocks')
 
 let blocks = [];
 let iconSets = [];
@@ -19,26 +20,32 @@ function getBlocks(fileString) {
             return
         }
         _blocks.forEach(block => {
-            let _block = {
-                title: null,
-                descriptions: [],
-                sections: [
-
-                ]
-            }
             let _items = parser.block.section.getTitleAndDescription( block );
-            _items.forEach(item => {
 
-                let key = parser.block.getItemKey( item )
-                let value = parser.block.getItemValue( item );
-
-                if (key === '@#') {
-                    _block.title = value
-                }
-                if (key === '@description') {
-                    _block.descriptions.push(value)
-                }
+            // Adds title and description to past in object.
+            let _block = _items.reduce( ( acc, curr ) => {
+                const obj = blockLib.getKeyAndValue( curr )
+                if (obj.key === '@#') acc.title = obj.value
+                if (obj.key === '@description') acc.descriptions.push(obj.value)
+                return acc
+            },
+            {
+              title: null,
+              descriptions: [],
+              sections: []
             })
+
+
+
+            clRed( util.inspect( '---------------------' , false, null))
+            clBlue(util.inspect( _block, false, null))
+            clRed( util.inspect( '---------------------' , false, null))
+
+
+
+
+
+
 
             let _sections = parser.block.section.getAllAsArray( block )
             _sections.forEach(section => {
@@ -120,7 +127,7 @@ function getIconSets(fileString) {
               let parsedCssClass = cssClass[0].replace(/^(\.|#)/i, ''); // strips . and # from beginning of class
               parsedMarkup = parser.block.section.replaceCssClass( markup, parsedCssClass);
             }
-            console.log(parsedMarkup)
+            // console.log(parsedMarkup)
             _iconBlockObj.cssClasses.push({
               info: info,
               cssClass: cssClass,
@@ -129,7 +136,7 @@ function getIconSets(fileString) {
           })
           iconSets.push(_iconBlockObj)
         })
-        clGreen(util.inspect(iconSets, false, null))
+        // clGreen(util.inspect(iconSets, false, null))
         resolve()
     })
 }
