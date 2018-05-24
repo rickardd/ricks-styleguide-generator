@@ -3,8 +3,6 @@ const figlet = require('figlet')
 const fs = require('fs')
 const util = require('util')
 
-
-
 const questions = [
   { phrase: "Title? ", configName: "title"},
   { phrase: "src directory? ", configName: "src"},
@@ -71,17 +69,3 @@ figlet('Ricks Style Guide!', function(err, data) {
     console.log(chalk.yellow(data));
     handleQA()
 });
-
-
-// console.log('PATH:', process.cwd() )
-
-// var path = require('path');
-// var appDir = path.dirname(require.main.filename);
-// console.log(appDir)
-// console.log(process.argv)
-
-
-
-
-
-

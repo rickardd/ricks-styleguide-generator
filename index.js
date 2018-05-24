@@ -5,23 +5,7 @@ const path = require('path')
 const htmlParser = require('./htmlGenerator')
 const {clRed, clGreen, clBlue } = require('./console')
 const file = require('./file')
-
-const blockRegEx = /(?<=\/\*\*@).+(?=@\*\/)/gmis
-const blockTitleRegEx = /(?<=@#).+?;/gmis
-const itemsRegEx = /(@title|@markup|@description|@class).*?(?=;)/gmis
-const blockSectionsRegEx = /(?<=@--).+?(?=(@\/-))/gmis
-const titleDescSectionRegEx = /(@#|@description).*?(?=;)/gmis
-const blockKeyRegEx = /(@#|@description)/gmis
-const blockValueRegEx = /(?<=@#|@description).+$/gmis
-const itemKeyRegEx = /(@title|@markup|@description|@class)/gmis
-const itemValueRegEx = /(?<=@title|@markup|@description|@class).+$/gmis
-const parseMarkupRegEx = /({{class}}|{{ class }})/gmis
-const regExIconSet = /(?<=\/\*\*@)iconset-.+?(?=\/\*\*@\/iconset)/gsmi
-const regExIconBlock = /((\.).+?(?={)|@info\s.+?(?={))/gsmi
-const regExIconSetName = /(?<=iconset-).+\b/i
-const regExIconSetMarkup = /(?<=@markup\s).+/i
-const regExIconSetCssClass = /\..+?(?=:|{|\s)/gmi
-const regExIconSetCssClassInfo = /(?<=@info\s).*/i
+const { regEx } = require('./lib/regEx')
 
 let blocks = [];
 let iconSets = [];
@@ -29,14 +13,12 @@ let iconSets = [];
 function getBlocks(fileString) {
 
     return new Promise(function(resolve, reject) {
-        let _blocks = fileString.match(blockRegEx);
+        let _blocks = fileString.match(regEx.block.raw);
         if (!_blocks) {
             reject('No recognised styleguide comments')
             return
         }
-        console.clear()
         _blocks.forEach(block => {
-            // console.log('---')
             let _block = {
                 title: null,
                 descriptions: [],
@@ -45,11 +27,11 @@ function getBlocks(fileString) {
                 ]
             }
 
-            let _items = block.match(titleDescSectionRegEx);
+            let _items = block.match(regEx.block.section.titleAndDescription);
             _items.forEach(item => {
 
-                let key = item.match(blockKeyRegEx)[0].trim();
-                let value = item.match(blockValueRegEx)[0].trim();
+                let key = item.match(regEx.block.itemKey)[0].trim();
+                let value = item.match(regEx.block.itemValue)[0].trim();
 
                 if (key === '@#') {
                     _block.title = value
@@ -59,9 +41,9 @@ function getBlocks(fileString) {
                 }
             })
 
-            let _sections = block.match(blockSectionsRegEx)
+            let _sections = block.match(regEx.block.sections)
             _sections.forEach(section => {
-                let _sectionItems = section.match(itemsRegEx)
+                let _sectionItems = section.match(regEx.block.items)
                 let _section = {
                     classes: [],
                     descriptions: [],
@@ -70,8 +52,8 @@ function getBlocks(fileString) {
                 }
                 _sectionItems.forEach(sectionItem => {
 
-                    const _key = sectionItem.match(itemKeyRegEx)[0].trim()
-                    const _value = sectionItem.match(itemValueRegEx)[0].trim()
+                    const _key = sectionItem.match(regEx.block.section.itemKey)[0].trim()
+                    const _value = sectionItem.match(regEx.block.section.itemValue)[0].trim()
 
                     if (_key === '@class') {
                         _section.classes.push({
@@ -91,7 +73,7 @@ function getBlocks(fileString) {
 
                 _section.classes.forEach( obj => {
                   let className = obj.value.replace(/\./g, '')
-                  let _parsedMarkup = _section.markup.replace(parseMarkupRegEx, className);
+                  let _parsedMarkup = _section.markup.replace(regEx.block.section.classReplacer, className);
                   // console.log(_parsedMarkup)
                   _section.parsedMarkups.push( _parsedMarkup )
                 })
@@ -108,15 +90,15 @@ function getBlocks(fileString) {
 
 function getIconSets(fileString) {
     return new Promise(function(resolve, reject) {
-        let _iconSets = fileString.match(regExIconSet);
+        let _iconSets = fileString.match(regEx.iconset.raw);
         if (!_iconSets) {
             reject('No recognised styleguide iconset')
             return
         }
         clGreen( 'Styleguide Icon Set found')
         _iconSets.forEach(set => {
-          let title = set.match(regExIconSetName)
-          let markup = set.match(regExIconSetMarkup)
+          let title = set.match(regEx.iconset.name)
+          let markup = set.match(regEx.iconset.markup)
 
           title = !!title ? title[0] : null
           markup = !!markup ? markup[0].replace(/\*\//i, '') : null
@@ -126,11 +108,11 @@ function getIconSets(fileString) {
               markup: markup,
               cssClasses: []
           }
-          let _iconBlock = set.match(regExIconBlock)
+          let _iconBlock = set.match(regEx.iconset.block)
           _iconBlock.forEach(block => {
 
-            let info = block.match(regExIconSetCssClassInfo)
-            let cssClass = block.match(regExIconSetCssClass)
+            let info = block.match(regEx.iconset.cssClassInfo)
+            let cssClass = block.match(regEx.iconset.cssClass)
             let parsedMarkup = null
 
             info = (!!info) ? info[0].replace('\*\/', '').trim() : null // trims and strips trailing */ if block comment
@@ -138,7 +120,7 @@ function getIconSets(fileString) {
 
             if( !!markup ){
               let parsedCssClass = cssClass[0].replace(/^(\.|#)/i, ''); // strips . and # from beginning of class
-              parsedMarkup = markup.replace(parseMarkupRegEx, parsedCssClass);
+              parsedMarkup = markup.replace(regEx.block.section.classReplacer, parsedCssClass);
             }
             console.log(parsedMarkup)
             _iconBlockObj.cssClasses.push({
