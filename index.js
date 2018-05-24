@@ -22,30 +22,7 @@ function getBlocks(fileString) {
         _blocks.forEach(block => {
             let _items = parser.block.section.getTitleAndDescription( block );
 
-            // Adds title and description to past in object.
-            let _block = _items.reduce( ( acc, curr ) => {
-                const obj = blockLib.getKeyAndValue( curr )
-                if (obj.key === '@#') acc.title = obj.value
-                if (obj.key === '@description') acc.descriptions.push(obj.value)
-                return acc
-            },
-            {
-              title: null,
-              descriptions: [],
-              sections: []
-            })
-
-
-
-            clRed( util.inspect( '---------------------' , false, null))
-            clBlue(util.inspect( _block, false, null))
-            clRed( util.inspect( '---------------------' , false, null))
-
-
-
-
-
-
+            const _block = blockLib.populateObject( _items )
 
             let _sections = parser.block.section.getAllAsArray( block )
             _sections.forEach(section => {
