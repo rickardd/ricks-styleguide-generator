@@ -20,55 +20,20 @@ function getBlocks(fileString) {
             return
         }
         _blocks.forEach(block => {
-            let _items = parser.block.section.getTitleAndDescription( block );
+            // ToDo Coudl this be a composer case?
+            let parsedBlocks = parser.block.section.getTitleAndDescription( block );
+            const _block = blockLib.populateObject( parsedBlocks )
 
-            const _block = blockLib.populateObject( _items )
+            // ToDo Coudl this be a composer case?
+            const parsedSections = parser.block.section.getAllAsArray( block )
+            _block.sections = blockLib.populateSectionObject( parsedSections )
 
-            let _sections = parser.block.section.getAllAsArray( block )
-            _sections.forEach(section => {
-                let _sectionItems = parser.block.getItems( section )
-                let _section = {
-                    classes: [],
-                    descriptions: [],
-                    parsedMarkups: [],
-                    markup: null,
-                }
-                _sectionItems.forEach(sectionItem => {
-
-                    const _key = parser.block.section.getItemKey( sectionItem )
-                    const _value = parser.block.section.getItemValue( sectionItem )
-
-                    if (_key === '@class') {
-                        _section.classes.push({
-                            key: _key,
-                            value: _value,
-                        })
-                    }
-
-                    if (_key === '@description') {
-                        _section.descriptions.push(_value)
-                    }
-
-                    if (_key === '@markup') {
-                        _section.markup = _value
-                    }
-                })
-
-                _section.classes.forEach( obj => {
-                  let className = obj.value.replace(/\./g, '')
-                  let _parsedMarkup = parser.block.section.replaceCssClass( _section.markup, className )
-                  _section.parsedMarkups.push( _parsedMarkup )
-                })
-                _block.sections.push(_section)
-            })
             blocks.push(_block);
             // clBlue(util.inspect(blocks, false, null))
         });
         resolve()
     })
 }
-
-
 
 function getIconSets(fileString) {
     return new Promise(function(resolve, reject) {
