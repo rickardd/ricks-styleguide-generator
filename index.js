@@ -6,7 +6,7 @@ const htmlParser = require('./lib/html-generator')
 const { clRed, clGreen, clBlue } = require('./lib/console')
 const file = require('./lib/file')
 const { parser } = require('./lib/regEx')
-const { blockLib } = require('./lib/blocks')
+const { populateObject, populateSectionObject } = require('./lib/blocks')
 const { compose, pipe } = require('./lib/utils')
 
 let blocks = [];
@@ -24,17 +24,17 @@ function getBlocks(fileString) {
 
             // Example without compose
             // let parsedBlocks = parser.block.section.getTitleAndDescription( block );
-            // const _block = blockLib.populateObject( parsedBlocks )
+            // const _block = populateObject( parsedBlocks )
             const _block = pipe(
               parser.block.section.getTitleAndDescription,
-              blockLib.populateObject
+              populateObject
             )(block)
 
             // Example without compose
             // const parsedSections = parser.block.section.getAllAsArray( block )
-            // _block.sections = blockLib.populateSectionObject( parsedSections )
+            // _block.sections = populateSectionObject( parsedSections )
             _block.sections = compose(
-              blockLib.populateSectionObject,
+              populateSectionObject,
               parser.block.section.getAllAsArray
             )( block )
 
