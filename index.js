@@ -7,6 +7,7 @@ const { clRed, clGreen, clBlue } = require('./lib/console')
 const file = require('./lib/file')
 const { parser } = require('./lib/regEx')
 const { blockLib } = require('./lib/blocks')
+const { compose, pipe } = require('./lib/utils')
 
 let blocks = [];
 let iconSets = [];
@@ -20,13 +21,22 @@ function getBlocks(fileString) {
             return
         }
         _blocks.forEach(block => {
-            // ToDo Coudl this be a composer case?
-            let parsedBlocks = parser.block.section.getTitleAndDescription( block );
-            const _block = blockLib.populateObject( parsedBlocks )
 
-            // ToDo Coudl this be a composer case?
-            const parsedSections = parser.block.section.getAllAsArray( block )
-            _block.sections = blockLib.populateSectionObject( parsedSections )
+            // Example without compose
+            // let parsedBlocks = parser.block.section.getTitleAndDescription( block );
+            // const _block = blockLib.populateObject( parsedBlocks )
+            const _block = pipe(
+              parser.block.section.getTitleAndDescription,
+              blockLib.populateObject
+            )(block)
+
+            // Example without compose
+            // const parsedSections = parser.block.section.getAllAsArray( block )
+            // _block.sections = blockLib.populateSectionObject( parsedSections )
+            _block.sections = compose(
+              blockLib.populateSectionObject,
+              parser.block.section.getAllAsArray
+            )( block )
 
             blocks.push(_block);
             // clBlue(util.inspect(blocks, false, null))
